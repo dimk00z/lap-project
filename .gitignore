@@ -62,7 +62,7 @@ develop-eggs/
 dist/
 downloads/
 eggs/
-lib/
+
 lib64/
 parts/
 sdist/
@@ -248,3 +248,4 @@ artifacts/
 # ruff:
 .ruff_cache/
 .hypothesis/
+*.sqlite
