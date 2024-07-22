@@ -2,17 +2,24 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, TypeVar
 
+from advanced_alchemy.exceptions import RepositoryError
 from litestar.config.response_cache import (
     ResponseCacheConfig,
     default_cache_key_builder,
 )
 from litestar.plugins import CLIPluginProtocol, InitPluginProtocol
-from litestar.security.jwt import OAuth2Login
+from litestar.security.jwt import OAuth2Login, Token
+
+from src.app.cli.commands import user_management_app
+from src.app.config import constants, get_settings
+from src.app.db.models import User as UserModel
+from src.app.lib.exceptions import ApplicationError, exception_to_http_response
 
 if TYPE_CHECKING:
     from click import Group
     from litestar import Request
     from litestar.config.app import AppConfig
+
 T = TypeVar("T")
 
 
@@ -30,9 +37,6 @@ class ApplicationConfigurator(InitPluginProtocol, CLIPluginProtocol):
         """
 
     def on_cli_init(self, cli: Group) -> None:
-        from src.app.cli.commands import user_management_app
-        from src.app.config import get_settings
-
         settings = get_settings()
         self.app_slug = settings.app.slug
         cli.add_command(user_management_app)
@@ -43,13 +47,6 @@ class ApplicationConfigurator(InitPluginProtocol, CLIPluginProtocol):
         Args:
             app_config: The :class:`AppConfig <.config.app.AppConfig>` instance.
         """
-
-        from advanced_alchemy.exceptions import RepositoryError
-        from litestar.security.jwt import Token
-
-        from src.app.config import constants, get_settings
-        from src.app.db.models import User as UserModel
-        from src.app.lib.exceptions import ApplicationError, exception_to_http_response
 
         settings = get_settings()
 

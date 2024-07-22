@@ -229,20 +229,31 @@ def create_collection_dependencies() -> dict[str, Provide]:
     """
     return {
         LIMIT_OFFSET_DEPENDENCY_KEY: Provide(
-            provide_limit_offset_pagination, sync_to_thread=False
+            provide_limit_offset_pagination,
+            sync_to_thread=False,
         ),
         UPDATED_FILTER_DEPENDENCY_KEY: Provide(
-            provide_updated_filter, sync_to_thread=False
+            provide_updated_filter,
+            sync_to_thread=False,
         ),
         CREATED_FILTER_DEPENDENCY_KEY: Provide(
-            provide_created_filter, sync_to_thread=False
+            provide_created_filter,
+            sync_to_thread=False,
         ),
-        ID_FILTER_DEPENDENCY_KEY: Provide(provide_id_filter, sync_to_thread=False),
+        ID_FILTER_DEPENDENCY_KEY: Provide(
+            provide_id_filter,
+            sync_to_thread=False,
+        ),
         SEARCH_FILTER_DEPENDENCY_KEY: Provide(
-            provide_search_filter, sync_to_thread=False
+            provide_search_filter,
+            sync_to_thread=False,
         ),
-        ORDER_BY_DEPENDENCY_KEY: Provide(provide_order_by, sync_to_thread=False),
+        ORDER_BY_DEPENDENCY_KEY: Provide(
+            provide_order_by,
+            sync_to_thread=False,
+        ),
         FILTERS_DEPENDENCY_KEY: Provide(
-            provide_filter_dependencies, sync_to_thread=False
+            provide_filter_dependencies,
+            sync_to_thread=False,
         ),
     }

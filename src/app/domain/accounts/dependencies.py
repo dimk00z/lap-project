@@ -19,7 +19,9 @@ if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
 
 
-async def provide_user(request: Request[UserModel, Token, Any]) -> UserModel:
+async def provide_user(
+    request: Request[UserModel, Token, Any],
+) -> UserModel:
     """Get the user from the connection.
 
     Args:

@@ -19,11 +19,18 @@ class AppSettings:
     """Application configuration"""
 
     URL: str = field(
-        default_factory=lambda: os.getenv("APP_URL", "http://localhost:8000")
+        default_factory=lambda: os.getenv(
+            "APP_URL",
+            "http://localhost:8000",
+        )
     )
     """The frontend base URL"""
     DEBUG: bool = field(
-        default_factory=lambda: os.getenv("LITESTAR_DEBUG", "False") in TRUE_VALUES
+        default_factory=lambda: os.getenv(
+            "LITESTAR_DEBUG",
+            "False",
+        )
+        in TRUE_VALUES
     )
     """Run `Litestar` with `debug=True`."""
     SECRET_KEY: str = field(
@@ -35,14 +42,21 @@ class AppSettings:
     NAME: str = field(default_factory=lambda: "app")
     """Application name."""
     ALLOWED_CORS_ORIGINS: list[str] | str = field(
-        default_factory=lambda: os.getenv("ALLOWED_CORS_ORIGINS", '["*"]')
+        default_factory=lambda: os.getenv(
+            "ALLOWED_CORS_ORIGINS",
+            '["*"]',
+        )
     )
     """Allowed CORS Origins"""
-    CSRF_COOKIE_NAME: str = field(default_factory=lambda: "csrftoken")
+    CSRF_COOKIE_NAME: str = field(
+        default_factory=lambda: "csrftoken",
+    )
     """CSRF Cookie Name"""
     CSRF_COOKIE_SECURE: bool = field(default_factory=lambda: False)
     """CSRF Secure Cookie"""
-    JWT_ENCRYPTION_ALGORITHM: str = field(default_factory=lambda: "HS256")
+    JWT_ENCRYPTION_ALGORITHM: str = field(
+        default_factory=lambda: "HS256",
+    )
     """JWT Encryption Algorithm"""
 
     @property
@@ -56,46 +70,59 @@ class AppSettings:
 
     def __post_init__(self) -> None:
         # Check if the ALLOWED_CORS_ORIGINS is a string.
-        if isinstance(self.ALLOWED_CORS_ORIGINS, str):
-            # Check if the string starts with "[" and ends with "]", indicating a list.
-            if self.ALLOWED_CORS_ORIGINS.startswith(
-                "["
-            ) and self.ALLOWED_CORS_ORIGINS.endswith("]"):
-                try:
-                    # Safely evaluate the string as a Python list.
-                    self.ALLOWED_CORS_ORIGINS = json.loads(self.ALLOWED_CORS_ORIGINS)
-                except (SyntaxError, ValueError):
-                    # Handle potential errors if the string is not a valid Python literal.
-                    msg = "ALLOWED_CORS_ORIGINS is not a valid list representation."
-                    raise ValueError(msg) from None
-            else:
-                # Split the string by commas into a list if it is not meant to be a list representation.
-                self.ALLOWED_CORS_ORIGINS = [
-                    host.strip() for host in self.ALLOWED_CORS_ORIGINS.split(",")
-                ]
+        if not isinstance(self.ALLOWED_CORS_ORIGINS, str):
+            return
+
+        if not (
+            self.ALLOWED_CORS_ORIGINS.startswith("[")
+            and self.ALLOWED_CORS_ORIGINS.endswith("]")
+        ):
+            self.ALLOWED_CORS_ORIGINS = [
+                host.strip() for host in self.ALLOWED_CORS_ORIGINS.split(",")
+            ]
+            return
+        try:
+            # Safely evaluate the string as a Python list.
+            self.ALLOWED_CORS_ORIGINS = json.loads(self.ALLOWED_CORS_ORIGINS)
+        except (SyntaxError, ValueError):
+            # Handle potential errors if the string is not a valid Python literal.
+            msg = "ALLOWED_CORS_ORIGINS is not a valid list representation."
+            raise ValueError(msg) from None
 
 
 @dataclass
 class Settings:
-    app: AppSettings = field(default_factory=AppSettings)
-    db: DatabaseSettings = field(default_factory=DatabaseSettings)
-    server: ServerSettings = field(default_factory=ServerSettings)
-    log: LogSettings = field(default_factory=LogSettings)
-    redis: RedisSettings = field(default_factory=RedisSettings)
+    app: AppSettings = field(
+        default_factory=AppSettings,
+    )
+    db: DatabaseSettings = field(
+        default_factory=DatabaseSettings,
+    )
+    server: ServerSettings = field(
+        default_factory=ServerSettings,
+    )
+    log: LogSettings = field(
+        default_factory=LogSettings,
+    )
+    redis: RedisSettings = field(
+        default_factory=RedisSettings,
+    )
 
     @classmethod
     def from_env(cls, dotenv_filename: str = ".env") -> "Settings":
         from litestar.cli._utils import console
 
         env_file = Path(f"{os.curdir}/{dotenv_filename}")
-        if env_file.is_file():
-            from dotenv import load_dotenv
+        if not env_file.is_file():
+            return Settings()
 
-            console.print(
-                f"[yellow]Loading environment configuration from {dotenv_filename}[/]"
-            )
+        from dotenv import load_dotenv
 
-            load_dotenv(env_file)
+        console.print(
+            f"[yellow]Loading environment configuration from {dotenv_filename}[/]"
+        )
+
+        load_dotenv(env_file)
         return Settings()
 
 

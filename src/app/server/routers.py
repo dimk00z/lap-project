@@ -1,23 +1,26 @@
-from __future__ import annotations
+from litestar import Router
+from litestar.types import ControllerRouterHandler
 
-from typing import TYPE_CHECKING
-
+from src.app.domain.accounts.controllers import AccessController, UserController
 from src.app.domain.accounts.system.controllers import SystemController
 
-# from app.domain.accounts.controllers import (
-#     AccessController,
-#     UserController,
-#     UserRoleController,
-# )
-# from app.domain.system.controllers import SystemController
-# from app.domain.tags.controllers import TagController
-# from app.domain.teams.controllers import TeamController, TeamMemberController
-# from app.domain.web.controllers import WebController
+v1_router = Router(
+    path="/v1",
+    route_handlers=[
+        SystemController,
+        AccessController,
+        UserController,
+    ],
+)
 
-if TYPE_CHECKING:
-    from litestar.types import ControllerRouterHandler
+api_router = Router(
+    path="/api",
+    route_handlers=[
+        v1_router,
+    ],
+)
 
 
 route_handlers: list[ControllerRouterHandler] = [
-    SystemController,
+    api_router,
 ]

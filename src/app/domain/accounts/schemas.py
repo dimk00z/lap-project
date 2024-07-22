@@ -49,6 +49,7 @@ class User(CamelizedBaseStruct):
     id: UUID
     email: str
     name: str | None = None
+    avatar_url: str | None = None
     is_superuser: bool = False
     is_active: bool = False
     is_verified: bool = False
@@ -60,6 +61,7 @@ class UserCreate(CamelizedBaseStruct):
     email: str
     password: str
     name: str | None = None
+    avatar_url: str | None = None
     is_superuser: bool = False
     is_active: bool = True
     is_verified: bool = False

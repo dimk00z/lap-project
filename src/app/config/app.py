@@ -2,7 +2,6 @@ import logging
 from typing import cast
 
 from advanced_alchemy.extensions.litestar import (
-    AlembicAsyncConfig,
     AsyncSessionConfig,
     SQLAlchemyAsyncConfig,
     async_autocommit_before_send_handler,
@@ -36,11 +35,13 @@ alchemy = SQLAlchemyAsyncConfig(
     engine_instance=settings.db.get_engine(),
     before_send_handler=async_autocommit_before_send_handler,
     session_config=AsyncSessionConfig(expire_on_commit=False),
-    alembic_config=AlembicAsyncConfig(
-        version_table_name=settings.db.MIGRATION_DDL_VERSION_TABLE,
-        script_config=settings.db.MIGRATION_CONFIG,
-        script_location=settings.db.MIGRATION_PATH,
-    ),
+    # TODO: fix it with migrations
+    # alembic_config=AlembicAsyncConfig(
+    #     version_table_name=settings.db.MIGRATION_DDL_VERSION_TABLE,
+    #     script_config=settings.db.MIGRATION_CONFIG,
+    #     script_location=settings.db.MIGRATION_PATH,
+    # ),
+    create_all=True,
 )
 
 

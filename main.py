@@ -15,10 +15,12 @@ def create_app() -> Litestar:
 
     dependencies = {constants.USER_DEPENDENCY_KEY: Provide(provide_user)}
     dependencies.update(create_collection_dependencies())
+
     settings = get_settings()
-    return Litestar(
+    app = Litestar(
         route_handlers=routers.route_handlers,
         cors_config=config.cors,
+        dependencies=dependencies,
         debug=settings.app.DEBUG,
         openapi_config=openapi.config,
         plugins=[
@@ -33,3 +35,5 @@ def create_app() -> Litestar:
             account_signals.user_created_event_handler,
         ],
     )
+
+    return app

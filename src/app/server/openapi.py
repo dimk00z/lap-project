@@ -12,7 +12,7 @@ config = OpenAPIConfig(
     title=settings.app.NAME,
     version=current_version,
     components=[auth.openapi_components],
-    # security=[auth.security_requirement],  # TODO uncomment if not needed
+    security=[auth.security_requirement],
     use_handler_docstrings=True,
     render_plugins=[ScalarRenderPlugin()],
 )

@@ -27,3 +27,6 @@ test:
 
 test_local:
 	pytest tests -vv -ss
+
+freeze:
+	uv pip freeze | uv pip compile - -o requirements.txt

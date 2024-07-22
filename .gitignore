@@ -249,3 +249,4 @@ artifacts/
 .ruff_cache/
 .hypothesis/
 *.sqlite
+*.python_history
