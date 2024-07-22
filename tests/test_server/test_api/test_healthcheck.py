@@ -1,11 +1,27 @@
-from litestar import Litestar
+import pytest
+from httpx import AsyncClient
 from litestar.status_codes import HTTP_200_OK
-from litestar.testing import TestClient
+
+from src.app.__about__ import __version__
+
+pytestmark = pytest.mark.anyio
 
 
-def test_health_check_with_fixture(
-    app_client: TestClient[Litestar],
-) -> None:
-    response = app_client.get("/api/v1/health/")
+async def test_health(client: AsyncClient) -> None:
+    response = await client.get("/api/v1/health/")
     assert response.status_code == HTTP_200_OK
-    assert response.json().get("status") == "OK"
+
+    expected = {
+        "status": "online",
+        "app": "app",
+        "version": __version__,
+    }
+
+    assert response.json() == expected
+
+
+async def test_liveness(client: AsyncClient) -> None:
+    response = await client.get("/api/v1/liveness/")
+    assert response.status_code == HTTP_200_OK
+
+    assert response.text == "OK"

@@ -1,21 +1,21 @@
-from collections.abc import Iterator
+# from collections.abc import Iterator
+
+from collections.abc import AsyncIterator
 
 import pytest
+from httpx import AsyncClient
 from litestar import Litestar
-from litestar.testing import TestClient
 
-from main import get_litestar_app
-from server.config import AppConfig
+pytestmark = pytest.mark.anyio
 
 
-@pytest.fixture
-def app_config() -> Iterator[AppConfig]:
-    yield AppConfig()
+@pytest.fixture(name="client")
+async def fx_client(app: Litestar) -> AsyncIterator[AsyncClient]:
+    """Async client that calls requests on the app.
 
-
-@pytest.fixture(scope="function")
-def app_client(
-    app_config: AppConfig,
-) -> Iterator[TestClient[Litestar]]:
-    with TestClient(app=get_litestar_app(app_config=app_config)) as client:
+    ```text
+    ValueError: The future belongs to a different loop than the one specified as the loop argument
+    ```
+    """
+    async with AsyncClient(app=app, base_url="http://testserver") as client:
         yield client

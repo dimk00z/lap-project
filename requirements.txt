@@ -30,11 +30,18 @@ click==8.1.7
     #   rich-click
     #   uvicorn
 colorama==0.4.6
+covdefaults==2.3.0
+coverage==7.6.0
+    # via
+    #   covdefaults
+    #   pytest-cov
 cryptography==43.0.0
 distlib==0.3.8
     # via virtualenv
 ecdsa==0.19.0
     # via python-jose
+execnet==2.1.1
+    # via pytest-xdist
 faker==26.0.0
     # via polyfactory
 filelock==3.15.4
@@ -80,7 +87,9 @@ multidict==6.0.5
 nodeenv==1.9.1
     # via pre-commit
 packaging==24.1
-    # via pytest
+    # via
+    #   pytest
+    #   pytest-sugar
 passlib==1.7.4
 platformdirs==4.2.2
     # via virtualenv
@@ -98,8 +107,23 @@ pycparser==2.22
 pygments==2.18.0
     # via rich
 pytest==8.3.1
-    # via pytest-asyncio
+    # via
+    #   pytest-asyncio
+    #   pytest-cov
+    #   pytest-databases
+    #   pytest-mock
+    #   pytest-randomly
+    #   pytest-sugar
+    #   pytest-timeout
+    #   pytest-xdist
 pytest-asyncio==0.23.8
+pytest-cov==5.0.0
+pytest-databases==0.7.1
+pytest-mock==3.14.0
+pytest-randomly==3.15.0
+pytest-sugar==1.0.0
+pytest-timeout==2.3.1
+pytest-xdist==3.6.1
 python-dateutil==2.9.0.post0
     # via faker
 python-jose==3.3.0
@@ -133,6 +157,8 @@ sqlalchemy==2.0.31
     #   alembic
     #   sqladmin-litestar
 structlog==24.4.0
+termcolor==2.4.0
+    # via pytest-sugar
 typing-extensions==4.12.2
     # via
     #   advanced-alchemy
