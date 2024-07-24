@@ -36,5 +36,5 @@ jobs:
           python-version: "3.12"
       - uses: yezz123/setup-uv@v4
       - run: uv --version
-      - run: python -m uv pip install --no-cache -r requirements.txt
+      - run: uv pip install --no-cache -r requirements.txt
       - run: pytest tests -vv -ss
