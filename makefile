@@ -23,6 +23,9 @@ bash:
 	docker compose run --rm web bash
 
 test:
+	docker compose run --rm web pytest tests
+
+test_full_logs:
 	docker compose run --rm web pytest tests -vv -ss
 
 test_local:

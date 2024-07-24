@@ -12,11 +12,7 @@ from src.app.db.models import User
 from src.app.domain.accounts.guards import auth
 from src.app.domain.accounts.services import UserService
 from src.app.server.plugins import alchemy
-from tests.test_server.raw_data import (
-    RAW_USERS,
-    SUPER_USER_EMAIL,
-    COMMON_USER_EMAIl,
-)
+from tests.test_server.raw_data import RAW_USERS, SUPER_USER_EMAIL, COMMON_USER_EMAIl
 
 pytestmark = pytest.mark.anyio
 
@@ -69,15 +65,7 @@ async def _seed_db(
     async with engine.begin() as conn:
         await conn.run_sync(metadata.drop_all)
         await conn.run_sync(metadata.create_all)
-    # async with RoleService.new(sessionmaker()) as service:
-    #     fixture = await open_fixture_async(fixtures_path, "role")
-    #     for obj in fixture:
-    #         _ = await service.repository.get_or_upsert(
-    #             match_fields="name",
-    #             upsert=True,
-    #             **obj,
-    #         )
-    #     await service.repository.session.commit()
+
     async with UserService.new(sessionmaker()) as users_service:
         await users_service.create_many(
             raw_users,
