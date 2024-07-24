@@ -36,4 +36,4 @@ jobs:
           python-version: "3.12"
       - run: pip install uv
       - run: python -m uv pip install --no-cache -r requirements.txt
-      - run: pytest tests -vv -ss
+      - run: export PYTHONPATH="." && pytest tests -vv -ss
