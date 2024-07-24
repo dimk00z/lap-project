@@ -15,8 +15,6 @@ CACHE_EXPIRATION: int = 60
 """Default cache key expiration in seconds."""
 DEFAULT_USER_ROLE = "Application Access"
 """The name of the default role assigned to all users."""
-HEALTH_ENDPOINT = "/health"
-"""The endpoint to use for the the service health check."""
 SITE_INDEX = "/"
 """The site index URL."""
 OPENAPI_SCHEMA = "/schema"

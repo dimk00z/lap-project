@@ -115,7 +115,6 @@ auth = OAuth2PasswordBearerAuth[User](
     token_url=urls.ACCOUNT_LOGIN,
     exclude=[
         constants.OPENAPI_SCHEMA,
-        constants.HEALTH_ENDPOINT,
         urls.ACCOUNT_LOGIN,
         urls.ACCOUNT_REGISTER,
     ],

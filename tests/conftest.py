@@ -1,4 +1,5 @@
 from collections.abc import AsyncGenerator, AsyncIterator
+from typing import Callable
 
 import pytest
 from httpx import AsyncClient
@@ -81,5 +82,8 @@ async def fx_session(
 
 
 @pytest.fixture
-def base_api_path() -> str:
-    return "/api/v1"
+def get_endpoint_path() -> Callable[[str], str]:
+    def _wrapper(endpoint_path: str) -> str:
+        return f"/api/v1{endpoint_path}"
+
+    return _wrapper
