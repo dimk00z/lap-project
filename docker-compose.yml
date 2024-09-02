@@ -1,0 +1,79 @@
+---
+
+# Default compose file for development.
+
+version: "3.8"
+services:
+  # infra
+  
+  db:
+    image: "postgres:16.2-alpine"
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - postgresnet
+    env_file: ./config/.env
+
+  # redis:
+  #   image: "redis:7.2-alpine"
+  #   restart: unless-stopped
+  #   ports:
+  #     - '6379:6379'
+  #   volumes:
+  #     - redis:/data
+  #   networks:
+  #     - webnet
+
+  caddy:
+    image: "caddy:2.8"
+    restart: unless-stopped
+    env_file: ./config/.env
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile  # configuration
+      - caddy-config:/config  # configuration autosaves
+      - caddy-data:/data  # saving certificates
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - web
+    networks:
+      - webnet
+  
+
+  web:
+      # Image name is changed in production:
+    image: "lap_project:dev"
+    build: 
+      context: .
+      dockerfile: ./docker/Dockerfile
+      args:
+        - UID=${UID:-1000}
+        - GID=${GID:-1000}
+    volumes:
+      # Mount source code for development:
+      - .:/code
+    depends_on:
+      - db
+    #   - redis
+    networks:
+      - webnet
+      - postgresnet
+    env_file: ./config/.env
+    environment:
+      PYTHONPATH: . # for tests
+
+    expose:
+      - "8000"
+    # command for development up with reload:
+    command: "uvicorn --factory main:create_app --host 0.0.0.0 --port 8000 --reload"
+
+networks:
+  webnet:
+  postgresnet:
+
+volumes:
+  pgdata:
+  caddy-config:
+  caddy-data:

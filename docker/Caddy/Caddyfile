@@ -1,0 +1,33 @@
+# See https://caddyserver.com/docs
+
+# Email for Let's Encrypt expiration notices
+{
+	email {$TLS_EMAIL}
+}
+
+# "www" redirect to "non-www" version
+www.{$DOMAIN_NAME} {
+	redir https://{$DOMAIN_NAME}{uri}
+}
+
+{$DOMAIN_NAME} {
+	# HTTPS options:
+	header Strict-Transport-Security max-age=31536000;
+
+	# Removing some headers for improved security:
+	header -Server
+
+	# tls self_signed
+	tls internal
+	# Serve app
+	
+	handle {
+		reverse_proxy web:8000
+	}
+
+	# logs turned off for development
+	# Logs:
+	# log {
+	# 	output stdout
+	# }
+}
